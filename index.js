@@ -17,18 +17,31 @@ app.use(bodyParser.json({
 
 app.post('/api/t9', (req, res) => {
   console.log('T9 Post Request for: ', req.body.number)
-  const dictionary = fs.readFileSync(`./helpers/${String(req.body.number).length}_letter_words.txt`).toString('utf-8')
+  const dictionary = fs.readFileSync(`./helpers/${3}_letter_words.txt`).toString('utf-8')
   const wordDictionary = dictionary.split("\n")
 
   const number = req.body.number
   if (number <= 9) {
-    res.status(200).send({ data: keys[number] })
+    res.status(200).send({
+      combos: keys[number],
+      words: keys[number]
+    })
   } else {
     const combinations = _(String(number).split('')).map(digit => {
       return keys[digit]
     }).reduce(reduceFunc).sort()
 
-    res.status(200).send({ data: combinations })
+    let realWords = []
+    combinations.forEach((item, index) => {
+      if (wordDictionary.indexOf(item.toUpperCase()) > -1) {
+        realWords.push(item)
+      }
+    })
+
+    res.status(200).send({
+      combos: combinations,
+      words: realWords
+    })
   }
 })
 
