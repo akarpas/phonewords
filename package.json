@@ -1,0 +1,19 @@
+{
+  "name": "phonewords",
+  "version": "1.0.0",
+  "description": "Number to word list converter based on T9 Dictionary",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akarpas/phonewords.git"
+  },
+  "author": "Andreas Karpasitis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akarpas/phonewords/issues"
+  },
+  "homepage": "https://github.com/akarpas/phonewords#readme"
+}
