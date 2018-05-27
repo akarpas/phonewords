@@ -1,13 +1,18 @@
 const express = require('express')
 const path = require('path')
 const keys = require('./helpers/keys')
+const bodyParser = require('body-parser')
+
 
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(bodyParser.json({
+  limit: '1000kb'
+}))
 
-app.get('/api/t9', (req, res) => {
-  console.log('T9 Get Request')
+app.post('/api/t9', (req, res) => {
+  console.log('T9 Get Request', req.body)
   // handle T9 response here
 })
 
