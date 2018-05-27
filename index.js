@@ -5,7 +5,9 @@ const bodyParser = require('body-parser')
 const _ = require('lodash')
 
 const app = express()
-const reduceFunc = (a, b) => b.reduce((result, b) => result.concat(a.map(a => a + b)), []);
+const reduceFunc = (a, b) => {
+  return b.reduce((result, b) => result.concat(a.map(a => a + b)), [])
+}
 
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(bodyParser.json({
