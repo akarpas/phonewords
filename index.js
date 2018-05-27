@@ -3,6 +3,7 @@ const path = require('path')
 const keys = require('./helpers/keys')
 const bodyParser = require('body-parser')
 const _ = require('lodash')
+const fs = require('fs')
 
 const app = express()
 const reduceFunc = (a, b) => {
@@ -16,6 +17,9 @@ app.use(bodyParser.json({
 
 app.post('/api/t9', (req, res) => {
   console.log('T9 Post Request for: ', req.body.number)
+  const dictionary = fs.readFileSync(`./helpers/${String(req.body.number).length}_letter_words.txt`).toString('utf-8')
+  const wordDictionary = dictionary.split("\n")
+
   const number = req.body.number
   if (number <= 9) {
     res.status(200).send({ data: keys[number] })
