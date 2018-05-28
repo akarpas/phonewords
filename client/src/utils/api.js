@@ -4,7 +4,7 @@ export default async (endpoint, number, method) => {
   let url
   const options = {
       method: method,
-      body:    JSON.stringify({ number: number }),
+      body: JSON.stringify({ number: number }),
       headers: {
         'Content-Type': 'application/json'
       }
