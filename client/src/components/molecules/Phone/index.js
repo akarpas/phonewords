@@ -94,17 +94,13 @@ class Phone extends Component {
         <div className={style.screen}>
           <div className={style.status}>
             <input
+              disabled
               type="text"
               value={value.slice(0,this.state.max)}
               onChange={this.handleChange}
               className={style.input}
             />
             <div className={style.current}> {combos[this.state.selection]}</div>
-            <div className={style.reload} onClick={this.loop}>
-              <i className="material-icons">
-                loop
-              </i>
-            </div>  
           </div>
           <div className={style.suggestions}>
             {  
@@ -125,6 +121,13 @@ class Phone extends Component {
           </div>
         </div>
         <div className={style.buttons}>
+            <div className={style.row}>         
+              <div className={style.reload} onClick={this.loop}>
+                <i className="material-icons">
+                  loop
+                </i>
+              </div>
+            </div>            
             <div className={style.row}>          
               <Button label={1} sub={'switch'}/>
               <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
