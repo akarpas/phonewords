@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Button from '../../atoms/Button'
 import * as actionsT9 from '../../../actions/tNine'
 import _ from 'lodash'
 
@@ -52,6 +53,7 @@ class Phone extends Component {
   }
 
   click = (e, number) => {
+    e.preventDefault()
     this.setState({
       clickCount: this.state.clickCount === 8
         ? 0 : this.state.clickCount + 1
@@ -123,40 +125,27 @@ class Phone extends Component {
           </div>
         </div>
         <div className={style.buttons}>
-          <div className={style.row}>
-            <div className={style.button}>
-              1
+            <div className={style.row}>          
+              <Button label={1} sub={'switch'}/>
+              <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
+              <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
             </div>
-            <div className={style.button} onClick={(e) => this.click(e, 2)}>
-              2
+            <div className={style.row}>                      
+              <Button label={4} sub={'ghi'} click={(e) => this.click(e, 4)}/>
+              <Button label={5} sub={'jkl'} click={(e) => this.click(e, 5)}/>
+              <Button label={6} sub={'mno'} click={(e) => this.click(e, 6)}/>
             </div>
-            <div className={style.button} onClick={(e) => this.click(e, 3)}>
-              3
+            <div className={style.row}>
+              <Button label={7} sub={'pqrs'} click={(e) => this.click(e, 7)}/>
+              <Button label={8} sub={'tuv'} click={(e) => this.click(e, 8)}/>
+              <Button label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
             </div>
-          </div>
-          <div className={style.row}>
-            <div className={style.button} onClick={(e) => this.click(e, 4)}>
-              4
-            </div>
-            <div className={style.button} onClick={(e) => this.click(e, 5)}>
-              5
-            </div>
-            <div className={style.button} onClick={(e) => this.click(e, 6)}>
-              6
-            </div>
-          </div>
-          <div className={style.row}>
-            <div className={style.button} onClick={(e) => this.click(e, 7)}>
-              7
-            </div>
-            <div className={style.button} onClick={(e) => this.click(e, 8)}>
-              8
-            </div>
-            <div className={style.button} onClick={(e) => this.click(e, 9)}>
-              9
+            <div className={style.row}>            
+              <Button label={'*'} />
+              <Button label={0} />
+              <Button label={'#'} />
             </div>
           </div>
-        </div>
       </div>
     )
   }
