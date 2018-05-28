@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actionsT9 from '../actions/tNine'
+import Phone from '../components/molecules/Phone'
 import style from './App.scss'
 class App extends Component {
 
@@ -13,8 +14,8 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <h2 className={style.title} onClick={(e) => this.click(e)}> Phone Words </h2>
+      <div className={style.content}>
+        <Phone />
       </div>
     )
   }
