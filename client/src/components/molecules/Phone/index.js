@@ -8,11 +8,8 @@ import _ from 'lodash'
 import style from './index.scss'
 
 class Phone extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      max: 10,
-      number: '',
+    state = {
+      max: 8,
       value: '',
       start: '',
       elapsed: 0,
@@ -21,11 +18,8 @@ class Phone extends Component {
       words: [],
       results: false,
       selection: 0,
-      clickCount: 0,
       wordType: 'COMBOS'
     }
-    this.handleChange = this.handleChange.bind(this)
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.results.combos) {
@@ -59,13 +53,11 @@ class Phone extends Component {
         break
       case 'clear':
         this.setState({
-          number: '',
           value: '',
           combos: [],
           words: [],
           results: false,
           selection: 0,
-          clickCount: 0,
           wordType: 'COMBOS'
         })
         break
@@ -94,18 +86,10 @@ class Phone extends Component {
 
   click = (e, number) => {
     e.preventDefault()
-    this.setState({
-      clickCount: this.state.clickCount === 8
-        ? 0 : this.state.clickCount + 1
-      })
     if (this.state.go) {
       clearInterval(this.state.timer)
     }
-    this.setState({
-      value: this.state.clickCount === 8 ?
-        this.state.value :
-        this.state.value + number
-      })
+    this.setState({ value: this.state.value + number })
     const timer = setInterval(this.tick, 1)
     this.setState({ timer })  
     this.startCount(e)
