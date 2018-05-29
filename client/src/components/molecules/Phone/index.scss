@@ -37,39 +37,45 @@ html {
 
 .status {
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 70%;
 }
 
 .current {
-  min-width: 40%;
-  max-width: 40%;  
-  background-color: rgba(0,0,0,0.2);
+  min-width: 100%;
+  max-width: 100%;  
+  background-color: rgba(0,0,0,0.1);
   border-radius: 5px;
   height: 30px;
   padding: 5px;
-  margin-left: 10px;
   border: 1px solid rgba(0,0,0,0.8);
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .input {
   height: 30px;
-  min-width: 90%;
-  max-width: 90%; 
+  min-width: 100%;
+  max-width: 100%; 
   border-radius: 5px;
   border: none;
   padding: 5px; 
-  font-size: 20px;
+  font-size: 24px;
+  text-align: center;
   background-color: transparent;
 }
 
+input[type='text']{
+  text-align: center;
+}
+
 .inputWrapper {
-  max-width: 50%;
+  width: 100%;
   height: 40px;
   border-bottom: 1px solid black;
+  margin-bottom: 10px;
 }
 
 .suggestions {
@@ -82,6 +88,7 @@ html {
   color: black;
   flex-wrap: wrap;
   overflow-y: scroll;
+  font-size: 18px;
   margin: 5px 5px 10px 5px;
 }
 

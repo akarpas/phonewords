@@ -8,11 +8,8 @@ import _ from 'lodash'
 import style from './index.scss'
 
 class Phone extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      max: 10,
-      number: '',
+    state = {
+      max: 8,
       value: '',
       start: '',
       elapsed: 0,
@@ -21,13 +18,11 @@ class Phone extends Component {
       words: [],
       results: false,
       selection: 0,
-      clickCount: 0,
       wordType: 'COMBOS'
     }
-    this.handleChange = this.handleChange.bind(this)
-  }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ results: false })
     if (nextProps.results.combos) {
       this.setState({
         combos: nextProps.results.combos,
@@ -39,6 +34,7 @@ class Phone extends Component {
 
   handleControls = (e) => {
     e.preventDefault()
+
     const { combos, words, wordType } = this.state
     const type = e.target.id
 
@@ -59,13 +55,11 @@ class Phone extends Component {
         break
       case 'clear':
         this.setState({
-          number: '',
           value: '',
           combos: [],
           words: [],
           results: false,
           selection: 0,
-          clickCount: 0,
           wordType: 'COMBOS'
         })
         break
@@ -87,42 +81,52 @@ class Phone extends Component {
       this.setState({elapsed: Date.now() - this.state.start})
     }
   }
+
   startCount = (e) => {
-      this.setState({start: Date.now(), go: true})
+    this.setState({start: Date.now(), go: true})
   }
 
   click = (e, number) => {
     e.preventDefault()
-    this.setState({
-      clickCount: this.state.clickCount === 8
-        ? 0 : this.state.clickCount + 1
-      })
     if (this.state.go) {
       clearInterval(this.state.timer)
     }
-    this.setState({
-      value: this.state.clickCount === 8 ?
-        this.state.value :
-        this.state.value + number
-      })
+    this.setState({ value: this.state.value + number })
     const timer = setInterval(this.tick, 1)
     this.setState({ timer })  
     this.startCount(e)
   }
 
-  handleChange = (event) => {
-    event.preventDefault()
+  handleChange = (e) => {
+    e.preventDefault()
     this.setState({ value: this.state.value + event.target.value })
   }
 
-  loop = (event) => {
-    event.preventDefault()
-
+  backSpace = (e) => {
+    e.preventDefault()
+    
+    const length = this.state.value.length
+    if (length >= 2) {
+      const current = this.state.value
+      const timer = setInterval(this.tick, 1)
+      this.startCount(e)
+      this.setState({
+        timer,
+        value: current.substring(0, current.length - 1),
+        selection: 0,
+      })
+    } else {
+      clearInterval(this.state.timer)
+      this.setState({
+        words: [],
+        combos: [],
+        value: '',
+      })
+    }
   }
 
   render() {
-    const { combos, words, results, value } = this.state
-
+    const { selection, combos, words, results, value } = this.state
     const wordsToShow = this.state.wordType === 'COMBOS' ? combos : words
 
     return (
@@ -130,29 +134,28 @@ class Phone extends Component {
         <div className={style.screen}>
           <div className={style.status}>
             <div className={style.inputWrapper}>
-              <input
-                disabled
-                type="text"
+              <input disabled type="text"
                 value={value.slice(0,this.state.max)}
                 onChange={this.handleChange}
                 className={style.input}
               />
             </div>
-            <div className={style.current}> {combos[this.state.selection]}</div>
+            <div className={style.current}>
+              {wordsToShow[this.state.selection]}
+            </div>
           </div>
           <div className={style.suggestions}>
             {  
               wordsToShow.map(((item, index) => {
                 return (
-                  <div  
+                  <div
+                    key={item}
                     className={
-                      index === this.state.selection ? 
-                      style.suggestionOn : 
-                      style.suggestion
-                    }
-                    key={item}>
-                      {item}
-                    </div>
+                      index === selection ? style.suggestionOn : style.suggestion
+                    }  
+                  >
+                    {item}
+                  </div>
                   )
               }))
             }
@@ -166,7 +169,7 @@ class Phone extends Component {
               />
             </div>            
             <div className={style.row}>          
-              <Button label={1} />
+              <Button label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
               <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
               <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
             </div>
@@ -181,9 +184,9 @@ class Phone extends Component {
               <Button label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
             </div>
             <div className={style.row}>            
-              <Button label={'*'} />
+              <Button label={'*'} sub={'icon'} click={(e) => this.handleControls(e)} />
               <Button label={0} />
-              <Button label={'#'} />
+              <Button label={'#'} sub={'icon'} click={(e) => this.handleControls(e)}/>
             </div>
           </div>
       </div>
