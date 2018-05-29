@@ -87,6 +87,7 @@ class Phone extends Component {
       this.setState({elapsed: Date.now() - this.state.start})
     }
   }
+
   startCount = (e) => {
       this.setState({start: Date.now(), go: true})
   }
@@ -110,19 +111,24 @@ class Phone extends Component {
     this.startCount(e)
   }
 
-  handleChange = (event) => {
-    event.preventDefault()
+  handleChange = (e) => {
+    e.preventDefault()
     this.setState({ value: this.state.value + event.target.value })
   }
 
-  loop = (event) => {
-    event.preventDefault()
+  backSpace = (e) => {
+    e.preventDefault()
+    const current = this.state.value
+    const timer = setInterval(this.tick, 1)
+    this.startCount(e)
+    this.setState({
+      timer, value: current.substring(0, current.length - 1)
+    })
 
   }
 
   render() {
-    const { combos, words, results, value } = this.state
-
+    const { selection, combos, words, results, value } = this.state
     const wordsToShow = this.state.wordType === 'COMBOS' ? combos : words
 
     return (
@@ -144,15 +150,14 @@ class Phone extends Component {
             {  
               wordsToShow.map(((item, index) => {
                 return (
-                  <div  
+                  <div
+                    key={item}
                     className={
-                      index === this.state.selection ? 
-                      style.suggestionOn : 
-                      style.suggestion
-                    }
-                    key={item}>
-                      {item}
-                    </div>
+                      index === selection ? style.suggestionOn : style.suggestion
+                    }  
+                  >
+                    {item}
+                  </div>
                   )
               }))
             }
@@ -166,7 +171,7 @@ class Phone extends Component {
               />
             </div>            
             <div className={style.row}>          
-              <Button label={1} />
+              <Button label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
               <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
               <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
             </div>
@@ -181,9 +186,9 @@ class Phone extends Component {
               <Button label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
             </div>
             <div className={style.row}>            
-              <Button label={'*'} />
+              <Button label={'*'} sub={'icon'} click={(e) => this.handleControls(e)} />
               <Button label={0} />
-              <Button label={'#'} />
+              <Button label={'#'} sub={'icon'} click={(e) => this.handleControls(e)}/>
             </div>
           </div>
       </div>
