@@ -53,7 +53,8 @@ class Phone extends Component {
         break
       case 'words':
         this.setState({
-          wordType: this.state.wordType === 'COMBOS' ? 'WORDS' : 'COMBOS'
+          wordType: this.state.wordType === 'COMBOS' ? 'WORDS' : 'COMBOS',
+          selection: 0
         })
         break
       case 'clear':
