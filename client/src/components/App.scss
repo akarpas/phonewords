@@ -1,0 +1,15 @@
+.title {
+  color: black;
+  width: 90%;
+  text-align: center;
+  padding: 15px;
+}
+
+.content {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
