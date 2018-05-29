@@ -5,7 +5,6 @@ const baseUrl = process.env.NODE_ENV === 'development' ?
   'http://phonewords.heroku.com/api'
   // TO DO: Check deployment URL
 
-console.warn("base url: ", baseUrl)
 export default async (endpoint, number, method) => {
   let url
   const options = {
