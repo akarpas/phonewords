@@ -22,6 +22,7 @@ class Phone extends Component {
     }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ results: false })
     if (nextProps.results.combos) {
       this.setState({
         combos: nextProps.results.combos,
@@ -33,6 +34,7 @@ class Phone extends Component {
 
   handleControls = (e) => {
     e.preventDefault()
+
     const { combos, words, wordType } = this.state
     const type = e.target.id
 
@@ -81,7 +83,7 @@ class Phone extends Component {
   }
 
   startCount = (e) => {
-      this.setState({start: Date.now(), go: true})
+    this.setState({start: Date.now(), go: true})
   }
 
   click = (e, number) => {
@@ -102,13 +104,25 @@ class Phone extends Component {
 
   backSpace = (e) => {
     e.preventDefault()
-    const current = this.state.value
-    const timer = setInterval(this.tick, 1)
-    this.startCount(e)
-    this.setState({
-      timer, value: current.substring(0, current.length - 1)
-    })
-
+    
+    const length = this.state.value.length
+    if (length >= 2) {
+      const current = this.state.value
+      const timer = setInterval(this.tick, 1)
+      this.startCount(e)
+      this.setState({
+        timer,
+        value: current.substring(0, current.length - 1),
+        selection: 0,
+      })
+    } else {
+      clearInterval(this.state.timer)
+      this.setState({
+        words: [],
+        combos: [],
+        value: '',
+      })
+    }
   }
 
   render() {
@@ -120,15 +134,15 @@ class Phone extends Component {
         <div className={style.screen}>
           <div className={style.status}>
             <div className={style.inputWrapper}>
-              <input
-                disabled
-                type="text"
+              <input disabled type="text"
                 value={value.slice(0,this.state.max)}
                 onChange={this.handleChange}
                 className={style.input}
               />
             </div>
-            <div className={style.current}> {combos[this.state.selection]}</div>
+            <div className={style.current}>
+              {wordsToShow[this.state.selection]}
+            </div>
           </div>
           <div className={style.suggestions}>
             {  
