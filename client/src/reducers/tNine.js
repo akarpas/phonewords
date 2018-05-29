@@ -3,8 +3,15 @@ const INITIAL_STATE = {
   resultsPending: false
 }
 
-const setResults = (state, results) => ({ ...state, results, resultsPending: false })
-const setPending = (state, resultsPending) => ({ ...state, resultsPending })
+const setResults = (state, results) => ({
+  ...state, results,
+  resultsPending: false
+})
+
+const setPending = (state, resultsPending) => ({
+  ...state,
+  resultsPending
+})
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
