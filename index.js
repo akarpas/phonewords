@@ -17,8 +17,9 @@ app.use(bodyParser.json({
 
 app.post('/api/t9', (req, res) => {
   console.log('T9 Post Request for: ', req.body.number)
-  const dictionary = fs.readFileSync(`./helpers/${3}_letter_words.txt`).toString('utf-8')
-  const wordDictionary = dictionary.split("\n")
+  const dictionaryOne = fs.readFileSync(`./helpers/1000mostCommonWords.txt`).toString('utf-8')
+  const dictionaryTwo = fs.readFileSync(`./helpers/3_letter_words.txt`).toString('utf-8')
+  const wordDictionary = dictionaryOne.concat(dictionaryTwo).split("\n")
 
   const number = req.body.number
   if (number <= 9) {
@@ -33,7 +34,7 @@ app.post('/api/t9', (req, res) => {
 
     let realWords = []
     combinations.forEach((item, index) => {
-      if (wordDictionary.indexOf(item.toUpperCase()) > -1) {
+      if (wordDictionary.indexOf(item) > -1) {
         realWords.push(item)
       }
     })
