@@ -1,5 +1,11 @@
 import fetch from 'node-fetch'
 
+const baseUrl = process.env.NODE_ENV === 'development' ?
+  'http://localhost:5050/api' :
+  'http://phonewords.heroku.com/api'
+  // TO DO: Check deployment URL
+
+console.warn("base url: ", baseUrl)
 export default async (endpoint, number, method) => {
   let url
   const options = {
@@ -9,8 +15,8 @@ export default async (endpoint, number, method) => {
         'Content-Type': 'application/json'
       }
     }
-  // TODO: Set Dynamic Url for Dev and Production
-  url = `http://localhost:5050/api${endpoint}`
+
+  url = `${baseUrl}${endpoint}`
 
   const response = await fetch(url, options)
   const body = await response.json()
