@@ -22,7 +22,9 @@ app.post('/api/t9', (req, res) => {
   const wordDictionary = dictionaryOne.concat(dictionaryTwo).split("\n")
 
   const number = req.body.number
-  const isNumberClean = !(String(number).includes('0') || String(number).includes('9'))
+  const isNumberClean = 
+    String(number).indexOf('0') === -1
+    && String(number).indexOf('1') === -1
   if (typeof number !== 'number') {
     res.status(400).send({
       error: "only numbers"
