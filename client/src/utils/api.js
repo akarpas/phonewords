@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
 
-const currMode = process.env.NODE_ENV
+const test = process.env.NODE_ENV === 'test'
+const dev = process.env.NODE_ENV === 'development'
 
-const baseUrl = currMode === 'development' || currMode === 'test' ?
-  'http://localhost:5050/api' :
+const baseUrl = test || dev ? 'http://localhost:5050/api' :
   'https://t9phonewords.herokuapp.com/api'
   // TO DO: Check deployment URL
 
