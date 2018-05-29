@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Button from '../../atoms/Button'
+import Controls from '../../atoms/Controls'
 import * as actionsT9 from '../../../actions/tNine'
 import _ from 'lodash'
 
@@ -19,8 +20,9 @@ class Phone extends Component {
       combos: [],
       words: [],
       results: false,
-      selection: 0 ,
-      clickCount: 0   
+      selection: 0,
+      clickCount: 0,
+      wordType: 'COMBOS'
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -32,6 +34,42 @@ class Phone extends Component {
         words: nextProps.results.words,
         results: true
       })
+    }
+  }
+
+  handleControls = (e) => {
+    e.preventDefault()
+    const { combos, words, wordType } = this.state
+    const type = e.target.id
+
+    switch (type) {
+      case 'loop':
+        const currentList = wordType === 'COMBOS' ? combos : words
+        if (currentList.length - 1 === this.state.selection) {
+          this.setState({ selection: 0 })
+        } else {
+          this.setState({ selection: this.state.selection + 1 })
+        }
+        break
+      case 'words':
+        this.setState({
+          wordType: this.state.wordType === 'COMBOS' ? 'WORDS' : 'COMBOS'
+        })
+        break
+      case 'clear':
+        this.setState({
+          number: '',
+          value: '',
+          combos: [],
+          words: [],
+          results: false,
+          selection: 0,
+          clickCount: 0,
+          wordType: 'COMBOS'
+        })
+        break
+      default:
+        break;
     }
   }
 
@@ -78,33 +116,32 @@ class Phone extends Component {
 
   loop = (event) => {
     event.preventDefault()
-    if (this.state.combos.length - 1 === this.state.selection) {
-      this.setState({ selection: 0 })
 
-    } else {
-      this.setState({ selection: this.state.selection + 1 })
-    }
   }
 
   render() {
     const { combos, words, results, value } = this.state
 
+    const wordsToShow = this.state.wordType === 'COMBOS' ? combos : words
+
     return (
       <div className={style.phone}>
         <div className={style.screen}>
           <div className={style.status}>
-            <input
-              disabled
-              type="text"
-              value={value.slice(0,this.state.max)}
-              onChange={this.handleChange}
-              className={style.input}
-            />
+            <div className={style.inputWrapper}>
+              <input
+                disabled
+                type="text"
+                value={value.slice(0,this.state.max)}
+                onChange={this.handleChange}
+                className={style.input}
+              />
+            </div>
             <div className={style.current}> {combos[this.state.selection]}</div>
           </div>
           <div className={style.suggestions}>
             {  
-              combos.map(((item, index) => {
+              wordsToShow.map(((item, index) => {
                 return (
                   <div  
                     className={
@@ -122,14 +159,13 @@ class Phone extends Component {
         </div>
         <div className={style.buttons}>
             <div className={style.row}>         
-              <div className={style.reload} onClick={this.loop}>
-                <i className="material-icons">
-                  loop
-                </i>
-              </div>
+              <Controls
+                clickHandler={(e) => this.handleControls(e)}
+                type={this.state.wordType}
+              />
             </div>            
             <div className={style.row}>          
-              <Button label={1} sub={'switch'}/>
+              <Button label={1} />
               <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
               <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
             </div>

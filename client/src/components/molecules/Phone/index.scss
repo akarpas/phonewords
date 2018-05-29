@@ -55,29 +55,21 @@ html {
   font-size: 18px;
 }
 
-.reload {
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  align-items: center;
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
-  background-color: lightcoral;
-  margin: 5px;
-}
-
 .input {
   height: 30px;
-  min-width: 45%;
-  max-width: 45%; 
-  margin: 20px 0 20px 0;
-  box-shadow: inset 1px 1px 5px rgba(0,0,0,0.9);
+  min-width: 90%;
+  max-width: 90%; 
   border-radius: 5px;
   border: none;
   padding: 5px; 
   font-size: 20px;
   background-color: transparent;
+}
+
+.inputWrapper {
+  max-width: 50%;
+  height: 40px;
+  border-bottom: 1px solid black;
 }
 
 .suggestions {
