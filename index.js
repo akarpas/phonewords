@@ -12,7 +12,7 @@ const reduceFunc = (a, b) => {
 
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(bodyParser.json({
-  limit: '1000kb'
+  limit: '2000kb'
 }))
 
 app.post('/api/t9', (req, res) => {
@@ -22,7 +22,22 @@ app.post('/api/t9', (req, res) => {
   const wordDictionary = dictionaryOne.concat(dictionaryTwo).split("\n")
 
   const number = req.body.number
-  if (number <= 9) {
+  const isNumberClean = 
+    String(number).indexOf('0') === -1
+    && String(number).indexOf('1') === -1
+  if (typeof number !== 'number') {
+    res.status(400).send({
+      error: "only numbers"
+    })
+  } else if (!isNumberClean) {
+    res.status(400).send({
+      error: "available only digits with text: 2, 3, 4, 5, 6, 7, 8"
+    })
+  } else if (String(number).length > 9) {
+    res.status(400).send({
+      error: "currently up to 9 digit numbers supported"
+    })
+  } else if (number <= 9) {
     res.status(200).send({
       combos: keys[number],
       words: keys[number]
