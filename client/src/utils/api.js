@@ -11,13 +11,14 @@ export default async (endpoint, number, method) => {
   let url
   const options = {
       method: method,
-      body: JSON.stringify({ number: number }),
+      body: JSON.stringify({ number: Number(number) }),
       headers: {
         'Content-Type': 'application/json'
       }
     }
 
   url = `${baseUrl}${endpoint}`
+  console.warn(url)
 
   const response = await fetch(url, options)
   const body = await response.json()
