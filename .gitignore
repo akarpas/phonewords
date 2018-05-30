@@ -2,3 +2,4 @@
 /client/node_modules/
 /client/dist/
 /native/node_modules/
+/.DS_Store
