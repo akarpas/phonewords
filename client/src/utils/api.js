@@ -18,7 +18,6 @@ export default async (endpoint, number, method) => {
     }
 
   url = `${baseUrl}${endpoint}`
-  console.warn(url)
 
   const response = await fetch(url, options)
   const body = await response.json()
