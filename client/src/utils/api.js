@@ -5,7 +5,6 @@ const dev = process.env.NODE_ENV === 'development'
 
 const baseUrl = test || dev ? 'http://localhost:5050/api' :
   'https://t9phonewords.herokuapp.com/api'
-  // TO DO: Check deployment URL
 
 export default async (endpoint, number, method) => {
   let url
