@@ -5,9 +5,6 @@ React Frontend / Express Backend
 
 **Web Demo** [Click Here]: https://t9keyboard.netlify.com/
 
-WORK IN PROGRESS
-==================
-
 BACKEND
 ------------------
 ```nvm use```
