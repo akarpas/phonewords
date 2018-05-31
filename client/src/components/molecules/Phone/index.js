@@ -8,7 +8,9 @@ import _ from 'lodash'
 import style from './index.scss'
 
 class Phone extends React.Component {
-    state = {
+  constructor(props) {
+    super(props)
+    this.state = {
       max: 8,
       value: '',
       start: '',
@@ -20,6 +22,8 @@ class Phone extends React.Component {
       selection: 0,
       wordType: 'COMBOS'
     }
+  }
+
 
   componentWillReceiveProps(nextProps) {
     this.setState({ results: false })
