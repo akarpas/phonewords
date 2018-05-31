@@ -52,7 +52,7 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: 'index.html'
-    }),
-    new CleanWebpackPlugin(['dist'])
+    })
+    // new CleanWebpackPlugin(['dist'])
   ]
 }
