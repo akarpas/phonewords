@@ -1,42 +1,28 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { StyleSheet, Text, View, Input } from 'react-native';
 import PhoneButton from '../../atoms/PhoneButton'
 import PhoneControls from '../../atoms/PhoneControls'
 import _ from 'lodash'
 
 class Phone extends Component {
-    state = {
-      max: 8,
-      value: '',
-      start: '',
-      elapsed: 0,
-      go: false,
-      combos: [],
-      words: [],
-      results: false,
-      selection: 0,
-      wordType: 'COMBOS'
-    }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ results: false })
-    if (nextProps.results.combos) {
-      this.setState({
-        combos: nextProps.results.combos,
-        words: nextProps.results.words,
-        results: true
-      })
-    }
+  state = {
+    max: 8,
+    value: '',
+    start: '',
+    elapsed: 0,
+    go: false,
+    combos: ['Type A Number up to 9 digits. Use Combos Button to check for Words. Try for words bad, cat, dear etc.'],
+    words: [],
+    results: false,
+    selection: 0,
+    wordType: 'COMBOS'
   }
 
-  handleControls = (e) => {
+  handleControls = (e, type) => {
     e.preventDefault()
-
     const { combos, words, wordType } = this.state
-    const type = e.target.id
-
     switch (type) {
-      case 'loop':
+      case '*':
         const currentList = wordType === 'COMBOS' ? combos : words
         if (currentList.length - 1 === this.state.selection) {
           this.setState({ selection: 0 })
@@ -50,7 +36,7 @@ class Phone extends Component {
           selection: 0
         })
         break
-      case 'clear':
+      case '#':
         this.setState({
           value: '',
           combos: [],
@@ -61,19 +47,33 @@ class Phone extends Component {
         })
         break
       default:
-        break;
+        break
     }
   }
 
   tick = () => {
-    const stop = this.state.elapsed > 1500
+    const stop = this.state.elapsed > 1000
     if (stop) {
-      actionsT9.getWords(
-        this.props.dispatch,
-        this.state.value.slice(0,this.state.max)
-      )
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({ number: Number(this.state.value.slice(0,this.state.max)) }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
       clearInterval(this.state.timer)
-      this.setState({elapsed: 0, go: false, selection: 0 })      
+      fetch('https://t9phonewords.herokuapp.com/api/t9/', options)
+        .then(res => res.json())
+        .then(results => {
+          const { combos, words } = results
+          this.setState({ results: false })
+          this.setState({
+            combos,
+            words,
+            results: true
+          })
+        this.setState({elapsed: 0, go: false, selection: 0 })          
+        })
     } else {
       this.setState({elapsed: Date.now() - this.state.start})
     }
@@ -125,70 +125,167 @@ class Phone extends Component {
   render() {
     const { selection, combos, words, results, value } = this.state
     const wordsToShow = this.state.wordType === 'COMBOS' ? combos : words
-
     return (
-      <div className={style.phone}>
-        <div className={style.screen}>
-          <div className={style.status}>
-            <div className={style.inputWrapper}>
-              <input disabled type="text"
-                value={value.slice(0,this.state.max)}
-                onChange={this.handleChange}
-                className={style.input}
-              />
-            </div>
-            <div className={style.current}>
-              {wordsToShow[this.state.selection]}
-            </div>
-          </div>
-          <div className={style.suggestions}>
+      <View style={styles.phone}>
+        <View style={styles.screen}>
+          <View style={styles.status}>
+            <View style={styles.inputWrapper}>
+              <Text style={styles.input}>
+                {this.state.value || 'Type a Number'}
+              </Text>
+            </View>
+            <Text style={styles.current}>
+              {this.state.combos.length === 1 ? '' : wordsToShow[this.state.selection]}
+            </Text>
+          </View>
+          <View style={styles.suggestions}>
             {  
               wordsToShow.map(((item, index) => {
                 return (
-                  <div
-                    key={item}
-                    className={
-                      index === selection ? style.suggestionOn : style.suggestion
-                    }  
-                  >
-                    {item}
-                  </div>
-                  )
+                  <Text key={item} style={
+                      index === selection ? styles.suggestionOn : styles.suggestion
+                  }>{item}</Text>
+                )
               }))
             }
-          </div>
-        </div>
-        <div className={style.buttons}>
-            <div className={style.row}>         
-              <Controls
-                clickHandler={(e) => this.handleControls(e)}
-                type={this.state.wordType}
-              />
-            </div>            
-            <div className={style.row}>          
-              <Button label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
-              <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
-              <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
-            </div>
-            <div className={style.row}>                      
-              <Button label={4} sub={'ghi'} click={(e) => this.click(e, 4)}/>
-              <Button label={5} sub={'jkl'} click={(e) => this.click(e, 5)}/>
-              <Button label={6} sub={'mno'} click={(e) => this.click(e, 6)}/>
-            </div>
-            <div className={style.row}>
-              <Button label={7} sub={'pqrs'} click={(e) => this.click(e, 7)}/>
-              <Button label={8} sub={'tuv'} click={(e) => this.click(e, 8)}/>
-              <Button label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
-            </div>
-            <div className={style.row}>            
-              <Button label={'*'} sub={'icon'} click={(e) => this.handleControls(e)} />
-              <Button label={0} />
-              <Button label={'#'} sub={'icon'} click={(e) => this.handleControls(e)}/>
-            </div>
-          </div>
-      </div>
+          </View>
+        </View>
+        <View style={styles.buttons}>
+            <View style={styles.row}>
+              <View style={styles.controls} >
+                <PhoneControls type='loop' click={(e) => this.handleControls(e, '*')}/>
+                <PhoneControls type={this.state.wordType} click={(e) => this.handleControls(e, 'words')}/>
+                <PhoneControls type='clear' click={(e) => this.handleControls(e, '#')}/>
+              </View>
+            </View>
+            <View style={styles.row}>
+              <PhoneButton label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
+              <PhoneButton label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
+              <PhoneButton label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
+            </View>
+            <View style={styles.row}>
+              <PhoneButton label={4} sub={'ghi'} click={(e) => this.click(e, 4)}/>
+              <PhoneButton label={5} sub={'jkl'} click={(e) => this.click(e, 5)}/>
+              <PhoneButton label={6} sub={'mno'} click={(e) => this.click(e, 6)}/>
+            </View>
+            <View style={styles.row}>
+              <PhoneButton label={7} sub={'pqrs'} click={(e) => this.click(e, 7)}/>
+              <PhoneButton label={8} sub={'tuv'} click={(e) => this.click(e, 8)}/>
+              <PhoneButton label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
+            </View>
+            <View style={styles.row}>
+              <PhoneButton label={'*'} sub={'icon'} click={(e) => this.handleControls(e, '*')} />
+              <PhoneButton label={0} sub={'_'} />
+              <PhoneButton label={'#'} sub={'icon'} click={(e) => this.handleControls(e, '#')}/>
+            </View>
+          </View>
+      </View>
     )
   }
 }
 
 export default Phone
+
+const styles = StyleSheet.create({
+  html: {
+    overflow: "scroll",
+  },
+  // DOUBLE CHECK SCROLLBAR STYLING
+  webkitScrollbar: {
+    width: "0px",
+    backgroundColor: "transparent"
+  },
+  phone: {
+    flex: 1,
+    flexDirection: 'column',
+    minHeight: 590,
+    maxHeight: 700,
+    backgroundColor: "gray",
+    padding: 20,
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  screen: {
+    marginTop: 15,
+    width: 300,
+    height: 200,
+    backgroundColor: "rgb(165, 198, 165)",
+    borderRadius: 10,
+    paddingBottom: 10
+  },
+  status: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  current: {
+    minWidth: 150,
+    maxWidth: 200,
+    backgroundColor: "rgba(0,0,0,0.1)",
+    borderRadius: 5,
+    height: 30,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.8)",
+    borderStyle: "solid",
+    fontSize: 18,
+    textAlign: 'center'
+  },
+  input: {
+    color: 'black',
+    textAlign: 'center',
+    borderRadius: 5,
+    borderWidth: 0,
+    backgroundColor: "transparent",
+  },
+  inputWrapper: {
+    width: 200,
+    margin: 10,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    marginBottom: 10
+  },
+  suggestions: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 10,
+    minWidth: '90%'
+  },
+  suggestion: {
+    height: "auto",
+    margin: 3
+  },
+  suggestionOn: {
+    height: "auto",
+    backgroundColor: "rgba(230, 232, 183, 0.7)",
+    margin: 3
+  },
+  icon: {
+    height: "10px"
+  },
+  controls: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center"
+  },
+  buttons: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  }
+})
