@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
 
 import style from './index.scss'
 
-class Button extends Component {
+class PhoneButton extends React.Component {
   getContent = () => {
     switch (this.props.label) {
       case 1:
@@ -57,4 +56,4 @@ class Button extends Component {
   }
 }
 
-export default Button
+export default PhoneButton

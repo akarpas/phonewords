@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import style from './index.scss'
 
-class Controls extends Component {
+class PhoneControls extends React.Component {
   render() {
     return (
       <div className={style.controls}>
@@ -34,4 +34,4 @@ class Controls extends Component {
   }
 }
 
-export default Controls
+export default PhoneControls
