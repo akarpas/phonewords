@@ -4,7 +4,7 @@
   "description": "Number to word list converter based on T9 Dictionary",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "mocha --timeout 10000"
   },
   "repository": {
