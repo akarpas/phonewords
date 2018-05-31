@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import Button from '../../atoms/Button'
-import Controls from '../../atoms/Controls'
+import PhoneButton from '../../atoms/PhoneButton'
+import PhoneControls from '../../atoms/PhoneControls'
 import * as actionsT9 from '../../../actions/tNine'
 import _ from 'lodash'
 
 import style from './index.scss'
 
-class Phone extends Component {
+class Phone extends React.Component {
     state = {
       max: 8,
       value: '',
@@ -82,7 +82,7 @@ class Phone extends Component {
     }
   }
 
-  startCount = (e) => {
+  startCount = () => {
     this.setState({start: Date.now(), go: true})
   }
 
@@ -163,30 +163,30 @@ class Phone extends Component {
         </div>
         <div className={style.buttons}>
             <div className={style.row}>         
-              <Controls
+              <PhoneControls
                 clickHandler={(e) => this.handleControls(e)}
                 type={this.state.wordType}
               />
             </div>            
             <div className={style.row}>          
-              <Button label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
-              <Button label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
-              <Button label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
+              <PhoneButton label={1} sub={'icon'} click={(e) => this.backSpace(e)}/>
+              <PhoneButton label={2} sub={'abc'} click={(e) => this.click(e, 2)}/>
+              <PhoneButton label={3} sub={'def'} click={(e) => this.click(e, 3)}/>
             </div>
             <div className={style.row}>                      
-              <Button label={4} sub={'ghi'} click={(e) => this.click(e, 4)}/>
-              <Button label={5} sub={'jkl'} click={(e) => this.click(e, 5)}/>
-              <Button label={6} sub={'mno'} click={(e) => this.click(e, 6)}/>
+              <PhoneButton label={4} sub={'ghi'} click={(e) => this.click(e, 4)}/>
+              <PhoneButton label={5} sub={'jkl'} click={(e) => this.click(e, 5)}/>
+              <PhoneButton label={6} sub={'mno'} click={(e) => this.click(e, 6)}/>
             </div>
             <div className={style.row}>
-              <Button label={7} sub={'pqrs'} click={(e) => this.click(e, 7)}/>
-              <Button label={8} sub={'tuv'} click={(e) => this.click(e, 8)}/>
-              <Button label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
+              <PhoneButton label={7} sub={'pqrs'} click={(e) => this.click(e, 7)}/>
+              <PhoneButton label={8} sub={'tuv'} click={(e) => this.click(e, 8)}/>
+              <PhoneButton label={9} sub={'wxyz'} click={(e) => this.click(e, 9)}/>
             </div>
             <div className={style.row}>            
-              <Button label={'*'} sub={'icon'} click={(e) => this.handleControls(e)} />
-              <Button label={0} />
-              <Button label={'#'} sub={'icon'} click={(e) => this.handleControls(e)}/>
+              <PhoneButton label={'*'} sub={'icon'} click={(e) => this.handleControls(e)} />
+              <PhoneButton label={0} />
+              <PhoneButton label={'#'} sub={'icon'} click={(e) => this.handleControls(e)}/>
             </div>
           </div>
       </div>

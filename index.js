@@ -27,11 +27,13 @@ app.post('/api/t9', (req, res, next) => {
   const dictionaryTwo = fs.readFileSync(`./helpers/3_letter_words.txt`).toString('utf-8')
   const wordDictionary = dictionaryOne.concat(dictionaryTwo).split("\n")
 
-  const number = req.body.number
+  const isNumber = /^\d+$/.test(req.body.number)
+  const number = isNumber ? Number(req.body.number) : req.body.number
   const isNumberClean = 
     String(number).indexOf('0') === -1
     && String(number).indexOf('1') === -1
-  if (typeof number !== 'number') {
+
+    if (typeof number !== 'number') {
     res.status(400).send({
       error: "only numbers"
     })
