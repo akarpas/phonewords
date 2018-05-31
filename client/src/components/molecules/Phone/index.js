@@ -16,7 +16,7 @@ class Phone extends React.Component {
       start: '',
       elapsed: 0,
       go: false,
-      combos: [],
+      combos: ['Type A Number up to 9 digits. Use Combos Button to check for Words. Try for words bad, cat, dear etc.'],
       words: [],
       results: false,
       selection: 0,
@@ -145,7 +145,7 @@ class Phone extends React.Component {
               />
             </div>
             <div className={style.current}>
-              {wordsToShow[this.state.selection]}
+              {this.state.combos.length === 1 ? '' : wordsToShow[this.state.selection]}
             </div>
           </div>
           <div className={style.suggestions}>
