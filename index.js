@@ -4,22 +4,22 @@ const keys = require('./helpers/keys')
 const bodyParser = require('body-parser')
 const _ = require('lodash')
 const fs = require('fs')
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
+
 const reduceFunc = (a, b) => {
   return b.reduce((result, b) => result.concat(a.map(a => a + b)), [])
 }
+
+
 
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(bodyParser.json({
   limit: '2000kb'
 }))
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  next()
-})
 
 app.post('/api/t9', (req, res, next) => {
   console.log('T9 Post Request for: ', req.body.number)
