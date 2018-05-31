@@ -16,7 +16,7 @@ const reduceFunc = (a, b) => {
 
 
 
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, 'client/dist')))
 app.use(bodyParser.json({
   limit: '2000kb'
 }))
@@ -70,7 +70,7 @@ app.post('/api/t9', (req, res, next) => {
 })
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'))
+  res.sendFile(path.join(__dirname + '/client/dist/index.html'))
 })
 
 
