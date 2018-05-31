@@ -15,7 +15,13 @@ app.use(bodyParser.json({
   limit: '2000kb'
 }))
 
-app.post('/api/t9', (req, res) => {
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
+
+app.post('/api/t9', (req, res, next) => {
   console.log('T9 Post Request for: ', req.body.number)
   const dictionaryOne = fs.readFileSync(`./helpers/1000mostCommonWords.txt`).toString('utf-8')
   const dictionaryTwo = fs.readFileSync(`./helpers/3_letter_words.txt`).toString('utf-8')
