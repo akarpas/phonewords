@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Screen from '../../atoms/Screen'
 import PhoneButton from '../../atoms/PhoneButton'
 import PhoneControls from '../../atoms/PhoneControls'
 import * as actionsT9 from '../../../actions/tNine'
@@ -135,36 +136,13 @@ class Phone extends React.Component {
 
     return (
       <div className={style.phone}>
-        <div className={style.screen}>
-          <div className={style.status}>
-            <div className={style.inputWrapper}>
-              <input disabled type="text"
-                value={value.slice(0,this.state.max)}
-                onChange={this.handleChange}
-                className={style.input}
-              />
-            </div>
-            <div className={style.current}>
-              {this.state.combos.length === 1 ? '' : wordsToShow[this.state.selection]}
-            </div>
-          </div>
-          <div className={style.suggestions}>
-            {  
-              wordsToShow.map(((item, index) => {
-                return (
-                  <div
-                    key={item}
-                    className={
-                      index === selection ? style.suggestionOn : style.suggestion
-                    }  
-                  >
-                    {item}
-                  </div>
-                  )
-              }))
-            }
-          </div>
-        </div>
+        <Screen
+          value={value.slice(0,this.state.max)}
+          handleChange={(e) => this.handleChange(e)}
+          wordsToShow={wordsToShow}
+          currentWord={wordsToShow[this.state.selection]}
+          selection={selection}
+        />
         <div className={style.buttons}>
             <div className={style.row}>         
               <PhoneControls
