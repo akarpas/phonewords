@@ -4,8 +4,12 @@ import style from './index.scss'
 
 class Screen extends Component {
   render() {
-    const word = this.props.currentWord.length > 10 ?
+    let word = ''
+    if (this.props.currentWord) {
+      word = this.props.currentWord.length > 10 ?
       '' : this.props.currentWord
+    }
+
     return (
       <div className={style.screen}>
         <div className={style.status}>

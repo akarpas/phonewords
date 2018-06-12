@@ -74,7 +74,7 @@ class Phone extends React.Component {
   }
 
   tick = () => {
-    const stop = this.state.elapsed > 1500
+    const stop = this.state.elapsed > 1300
     if (stop) {
       actionsT9.getWords(
         this.props.dispatch,
